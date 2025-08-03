@@ -3,20 +3,16 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export default function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "light") {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    } else {
-      // Default to dark mode if no theme stored or if dark
+    if (storedTheme === "dark") {
       setIsDarkMode(true);
       document.documentElement.classList.add("dark");
-      if (!storedTheme) {
-        localStorage.setItem("theme", "dark");
-      }
+    } else {
+      localStorage.setItem("theme", "light");
+      setIsDarkMode(false);
     }
   }, []);
 
@@ -36,14 +32,16 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       className={cn(
-        "fixed top-5 right-5 z-50 p-2 rounded-full transition-colors duration-300",
-        "focus:outlin-hidden"
+        "fixed top-5 right-5 z-50 p-2 rounded-full transition-all duration-300",
+        "hover:bg-primary/10 hover:scale-105 active:scale-95",
+        "focus:outline-none focus:ring-2 focus:ring-primary/20"
       )}
+      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       {isDarkMode ? (
-        <Sun className="h-6 w-6 text-yellow-300" />
+        <Sun className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-300" />
       ) : (
-        <Moon className="h-6 w-6 text-blue-900" />
+        <Moon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-900" />
       )}
     </button>
   );
